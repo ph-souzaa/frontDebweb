@@ -113,6 +113,7 @@ document.getElementById('itemForm').addEventListener('submit', function(event) {
 
     fetch(url, {
         method: method,
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(itemData)
     })
