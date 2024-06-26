@@ -1,0 +1,24 @@
+/* Exemplo de CSS adicional que pode ser necessário */
+body {
+    background-color: #f8f9fa; /* Cor de fundo leve para o corpo da página */
+}
+
+.list-group-item{
+	width: 300px;
+    display: flex;
+    flex-direction: column;
+    padding: 32px;
+}
+
+.list-group{
+	display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.none{
+	display: none;
+}
+
+/* Estilos adicionais para personalização que o Bootstrap não cobre diretamente */

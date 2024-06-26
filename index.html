@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Itens e Requisições</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Gerenciamento</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#" onclick="showItemFormSection()">Cadastrar Item</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showItensListSection()">Mostrar Itens</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showRequisicaoFormSection()">Cadastrar Requisição</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showRequisicoesListSection()">Mostrar Requisições</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="logout()">Sair</a> <!-- Botão de sair -->
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container mt-4 none" id="itemFormSection">
+    <h2>Cadastrar Item</h2>
+    <form id="itemForm" class="mb-3">
+        <input type="hidden" id="itemId" />
+        <div class="mb-3">
+            <label for="itemName" class="form-label">Nome do Item</label>
+            <input type="text" id="itemName" class="form-control" placeholder="Nome do Item" required />
+        </div>
+        <div class="mb-3">
+            <label for="itemDescricao" class="form-label">Descrição</label>
+            <input type="text" id="itemDescricao" class="form-control" placeholder="Descrição do Item" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Salvar Item</button>
+    </form>
+</div>
+
+<div class="container mt-4 none" id="itensListSection">
+    <h2>Itens Cadastrados</h2>
+    <ul id="itensList" class="list-group"></ul>
+</div>
+
+<div class="container mt-4 none" id="requisicaoFormSection">
+    <h2>Cadastrar Requisição</h2>
+    <form id="requisicaoForm" class="mb-3">
+        <!-- Removendo o campo de ID -->
+        <div class="mb-3">
+            <label for="requisicaoDescricao" class="form-label">Descrição da Requisição</label>
+            <input type="text" id="requisicaoDescricao" class="form-control" placeholder="Descrição da Requisição" required />
+        </div>
+        <div class="mb-3">
+            <label for="requisicaoItem" class="form-label">Item Associado</label>
+            <select id="requisicaoItem" class="form-select">
+                <!-- Opções de itens serão carregadas dinamicamente aqui -->
+            </select>
+        </div>
+        <!-- Removendo o campo de status -->
+        <button type="submit" class="btn btn-primary">Salvar Requisição</button>
+    </form>
+</div>
+
+<div class="container mt-4" id="requisicoesListSection">
+    <h2>Requisições Cadastradas</h2>
+    <ul id="requisicoesList" class="list-group"></ul>
+</div>
+
+<!-- Modal para Atualização de Requisição -->
+<div class="modal fade" id="updateRequisicaoModal" tabindex="-1" aria-labelledby="updateRequisicaoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateRequisicaoModalLabel">Atualizar Requisição</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="updateRequisicaoForm">
+                    <input type="hidden" id="updateRequisicaoId">
+                    <div class="mb-3">
+                        <label for="updateRequisicaoDescricao" class="form-label">Descrição</label>
+                        <input type="text" class="form-control" id="updateRequisicaoDescricao" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" onclick="updateRequisicao()">Salvar Alterações</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Atualização de Item -->
+<div class="modal fade" id="updateItemModal" tabindex="-1" aria-labelledby="updateItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateItemModalLabel">Atualizar Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="updateItemForm">
+                    <input type="hidden" id="updateItemId">
+                    <div class="mb-3">
+                        <label for="updateItemName" class="form-label">Nome do Item</label>
+                        <input type="text" class="form-control" id="updateItemName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="updateItemDescricao" class="form-label">Descrição</label>
+                        <input type="text" class="form-control" id="updateItemDescricao" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" onclick="updateItem()">Salvar Alterações</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4" id="loginSection">
+    <h2>Login</h2>
+    <form id="loginForm" class="mb-3">
+        <div class="mb-3">
+            <label for="loginUsername" class="form-label">Usuário</label>
+            <input type="text" id="loginUsername" class="form-control" placeholder="Usuário" required />
+        </div>
+        <div class="mb-3">
+            <label for="loginPassword" class="form-label">Senha</label>
+            <input type="password" id="loginPassword" class="form-control" placeholder="Senha" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Entrar</button>
+    </form>
+</div>
+
+<script src="js/scripts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
